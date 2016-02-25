@@ -47,12 +47,10 @@
   "dependencies": {
     "body-parser": "1.15.0",
     "bower": "1.7.7",
-    "browserify": "13.0.0",
     "express": "^4.13.4",
     "grunt": "0.4.5",
     "mongoose": "4.4.3",
     "morgan": "1.6.1",
-    "q": "1.4.1",
-    "watchify": "3.7.0"
+    "q": "1.4.1"
   }
 }
