@@ -23,6 +23,8 @@
   },
   "homepage": "https://github.com/INeedClosure/INeedClosure#readme",
   "devDependencies": {
+    "angular": "1.5.0",
+    "angular-mocks": "1.5.0",
     "chai": "3.5.0",
     "express": "^4.13.4",
     "grunt-contrib-clean": "1.0.0",
@@ -35,6 +37,7 @@
     "grunt-karma": "0.12.1",
     "grunt-mocha": "0.4.15",
     "karma": "0.13.21",
+    "karma-browserify": "5.0.2",
     "karma-chai": "0.1.0",
     "karma-chrome-launcher": "0.2.2",
     "karma-mocha": "0.2.2",
