@@ -65,9 +65,11 @@ module.exports = {
           }
 
           decodedImage.data = new Buffer(matches[2], 'base64');
-          imageFilePath = '/userimage/'+ matches[2].substring(0,10)+'.'+decodedImage.fileExtension;
+          var subStringIndex = Math.floor(Math.random() * matches[2].length-20);
+          imageFilePath = 'userimage/'+ matches[2].substring(subStringIndex,subStringIndex+15).replace(/[^a-zA-Z ]/g, "")+'.'+decodedImage.fileExtension;
           console.log(imageFilePath);
-          fs.writeFile(__dirname+imageFilePath, decodedImage.data, function(err) {
+          serverfilepath = __dirname+'/../../'+imageFilePath;
+          fs.writeFile(serverfilepath, decodedImage.data, function(err) {
             console.log(err);
             });
           }

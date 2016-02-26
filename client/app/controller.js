@@ -42,7 +42,6 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
 
   $scope.clearForm = function() {
     //need a way to clear addresses filled with autocomplete, angular doesn't detect autocomplete as a change in DOM
-    document.getElementById('inputAddress').value = '';
     $scope.user = {};
     $scope.search = {};
   };
@@ -56,11 +55,15 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
     //convert inputted item name to lowerCase
     var lowerCaseItem = convertToLowerCase($scope.user.item);
     //convert inputted address, need to get value with JS bc angular can't detect autocomplete
-    var inputtedAddress = document.getElementById('inputAddress').value;
+    var inputtedAddress = $scope.user.location;
     Map.geocodeAddress(geocoder, Map.map, inputtedAddress, function(converted) {
       //after address converted, save user input item and location to db
-      DBActions.saveToDB({ item: lowerCaseItem, LatLng: converted, createdAt: new Date(), image: reader.result });
-    });
+      var reader = new window.FileReader();
+      //console.log();
+      reader.readAsDataURL($scope.uploader.flow.files[0].file);
+      reader.onloadend = function() {
+        DBActions.saveToDB({ item: lowerCaseItem, LatLng: converted, createdAt: new Date(), image: reader.result });
+      };   });
     $scope.clearForm();
   };
 
@@ -102,9 +105,9 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
         //if getCurrentPosition is method successful, returns a coordinates object
         var lat = position.coords.latitude;
         var long = position.coords.longitude;
-        $scope.$apply(function(){
-          $scope.user.location = lat + ', ' + long;
-        });
+        $scope.user.location = lat + ', ' + long;
+        $scope.$digest();
+
         stopSpinner();
       });
     } else {
