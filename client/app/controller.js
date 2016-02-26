@@ -1,5 +1,40 @@
-var app = angular.module('myApp', ['map.services'])
+var app = angular.module('myApp', ['map.services', 'ui.router'])
+.config(function($stateProvider, $urlRouterProvider) {
+  $urlRouterProvider.otherwise('/');
 
+  $stateProvider
+    //state for index html
+    .state('landing', {
+      url: '',
+      views: {
+        'main': {
+          templateUrl: "/main/landingPage.html"
+        },
+        'itemForm@landing': {
+          templateUrl: "main/itemForm.html"
+        }
+      }
+    })
+    .state('map', {
+      url: '/map',
+      views: {
+        'main': {
+          templateUrl: "/main/map.html"
+        }
+      }
+    })
+    .state('give', {
+      url: '/give',
+      views: {
+        'main': {
+          templateUrl: "/main/give.html"
+        },
+        'itemForm@landing': {
+          templateUrl: "main/itemForm.html"
+        }
+      }
+    })
+  })
 //dependencies injected include DBActions factory and Map factory
 .controller('FormController', function($scope, $http, DBActions, Map){
   $scope.user = {};
@@ -71,7 +106,7 @@ var app = angular.module('myApp', ['map.services'])
       error('Geo Location is not supported');
     }
   };
-  $scope.clearForm();
+  // $scope.clearForm();
 })
 
 .factory('DBActions', function($http, Map){
