@@ -7,13 +7,16 @@
     <link rel="stylesheet" type="text/css" href="/styles/styles.css" />
     <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lobster+Two' rel='stylesheet' type='text/css'>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script src='./bower_components/angular-ui-router/release/angular-ui-router.js'></script>
     <script src="/app/app.js"></script>
     <script src="/app/controller.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=
-AIzaSyAmI2fzx6riKLbgeFlIBvbaXrttPrZrqVI&libraries=places&callback=loadAllItems"></script>
+    <script src='./script/index.js'></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmI2fzx6riKLbgeFlIBvbaXrttPrZrqVI&libraries=places&callback=loadAllItems"></script>
   </head>
+
   <body id="#" ng-app="myApp" ng-controller="FormController">
     <nav class="navbar-fixed">
      <div id="headerSection" class="container-fluid">
@@ -22,7 +25,7 @@ AIzaSyAmI2fzx6riKLbgeFlIBvbaXrttPrZrqVI&libraries=places&callback=loadAllItems">
         <li><a href="#" id="logoTitle">Freebees</a></li>
         <li><p>Find free stuff around you!<p></li>
         <li class="rightFloat"><a href="#" class="anchor">Forager</a></li>
-        <li class="rightFloat"><a href="#inputSection" class="anchor">Giver</a></li>
+        <li class="rightFloat"><a href="#/map" class="anchor">Giver</a></li>
       </ul>
       <div id="searchInput">
         <form novalidate>
@@ -32,24 +35,11 @@ AIzaSyAmI2fzx6riKLbgeFlIBvbaXrttPrZrqVI&libraries=places&callback=loadAllItems">
       </div>
      </div>
     </nav>
-    <div id="map"></div>
-    <div id="inputSection">
-      <div id="inputForm">
-        <form novalidate >
-          <h2>Want to give away a Freebee?</h2><br>
-          <input placeholder="Your item" type="text" ng-model="user.item">
-          <input placeholder="Your address" id="inputAddress" type="text" ng-model="user.location"><br>
-          <button id="fillIp" type="submit" ng-click="ip()">Or use current location</button>
-          <div class="spinner"><img src="loading.gif"></div><br><br>
-            <button class="yellowButton submitForm" type="submit" ng-click="sendPost()" >
-              <a href="#">Submit </a>
-            </button>
-            <button class="yellowButton submitForm" type="submit" ng-click="removePost()">
-              <a href="#"> Delete</a>
-            </button>
-        </form>
-      </div>
+
+    <div ui-view="main">
+
     </div>
+
     <div id="footerSection">
       <div>Visit the <a target="_blank" href="https://github.com/FunFinder/Freebees">repo</a>!</div>
       <br>

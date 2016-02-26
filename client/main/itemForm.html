@@ -1,0 +1,12 @@
+<form novalidate >
+  <input placeholder="Your item" type="text" ng-model="user.item">
+  <input placeholder="Your address" id="inputAddress" type="text" ng-model="user.location"><br>
+  <button id="fillIp" type="submit" ng-click="ip()">Or use current location</button>
+  <div class="spinner"><img src="loading.gif"></div><br><br>
+    <button class="yellowButton submitForm" type="submit" ng-click="sendPost()" >
+      <a href="#">Submit </a>
+    </button>
+    <button class="yellowButton submitForm" type="submit" ng-click="removePost()">
+      <a href="#"> Delete</a>
+    </button>
+</form>
