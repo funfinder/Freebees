@@ -299,6 +299,13 @@ button a:visited, button a{
   text-decoration: none;
 }
 
+#imageDropBox {
+  margin: auto;
+  width: auto;
+  height: 300px;
+  top: 50%;
+}
+
 /*
 =========================
 Footer
@@ -358,3 +365,4 @@ span a {
   font-weight: bold;
   color: #fcad26;
 }
+

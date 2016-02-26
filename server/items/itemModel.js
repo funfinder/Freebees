@@ -28,6 +28,9 @@ var ItemSchema = new mongoose.Schema ({
   createdAt: {
     type: Date,
     required: true
+  },
+  image : {
+    type: String
   }
 });
 
