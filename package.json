@@ -36,6 +36,7 @@
     "grunt-express-server": "0.5.2",
     "grunt-karma": "0.12.1",
     "grunt-mocha": "0.4.15",
+    "jasmine": "2.4.1",
     "karma": "0.13.21",
     "karma-browserify": "5.0.2",
     "karma-chai": "0.1.0",
