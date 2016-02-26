@@ -22,7 +22,6 @@ module.exports = {
     var itemLocation = req.body.LatLng;
     var date = req.body.createdAt;
     var create;
-
     //The below line returns promisified version of Item.findOne bound to context Item
     //This is necessary because we will only create a new model after we search the db to see if it already exists
     var findOne = Q.nbind(Item.findOne, Item);
@@ -40,13 +39,17 @@ module.exports = {
         } else {
           //Q.nbind() promisifies its first argument, so now you could chain a .then() after create
           //the .then() below could be helpful for future features
+          //var image = new Image();
+          var imgBuf = new Buffer(req.body.image, 'base64');
+
           create = Q.nbind(Item.create, Item);
           newItem = {
             itemName: itemName,
             itemLocation: itemLocation,
             itemLng: itemLocation.lng,
             itemLat: itemLocation.lat,
-            createdAt: date
+            createdAt: date,
+            image : imgBuf
           };
 
           // In mongoose, .create() automaticaly creates AND saves simultaneously

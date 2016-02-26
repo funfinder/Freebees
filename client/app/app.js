@@ -79,7 +79,7 @@ var initMap = function(data){
   var autocomplete = new google.maps.places.Autocomplete(input, options);
 };
 
-/*add a marker to map. Instance needs to be an obj with itemLocation and itemName properties. The last parameter, timeout 
+/*add a marker to map. Instance needs to be an obj with itemLocation and itemName properties. The last parameter, timeout
 is passed in as a parameter to sequentially add each item so the markers drop down sequentially */
 var addMarker = function(map, instance, infoWindow, timeout){
   window.setTimeout(function(){

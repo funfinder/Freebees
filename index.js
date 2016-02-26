@@ -21,12 +21,14 @@ var port = process.env.PORT || 3000;
 //set up server logging
 app.use(morgan('dev'));
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '1mb'}));
 //parse x-ww-form-urlencoded encoded req bodies
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({limit: '1mb', extended: true}));
 
 //use routes.js
 app.use(express.static(__dirname + '/client'));
+app.use('image',express.static(__dirname+'/userImage'));
+
 require('./server/routes')(app);
 
 app.listen(port);
