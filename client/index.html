@@ -7,6 +7,7 @@
   <link rel="stylesheet" type="text/css" href="/styles/styles.css" />
   <link href='https://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Lobster+Two' rel='stylesheet' type='text/css'>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
   <script src='./bower_components/angular-ui-router/release/angular-ui-router.js'></script>
@@ -32,8 +33,9 @@
           <p>Find free stuff around you!
             <p>
         </li>
-        <li class="rightFloat"><a href="#" class="anchor">Forager</a></li>
-        <li class="rightFloat"><a href="#/map" class="anchor">Giver</a></li>
+        <li class="rightFloat"><a href="#/map" class="anchor">Forager</a></li>
+        <li class="rightFloat"><a href="#/give" class="anchor">Giver</a></li>
+
       </ul>
       <div id="searchInput">
         <form novalidate>
@@ -44,7 +46,7 @@
      </div>
     </nav>
 
-    <div ui-view="main">
+    <div ui-view="main" >
 
     </div>
 

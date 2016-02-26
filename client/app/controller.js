@@ -29,7 +29,7 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
         'main': {
           templateUrl: "/main/give.html"
         },
-        'itemForm@landing': {
+        'itemForm@give': {
           templateUrl: "main/itemForm.html"
         }
       }
