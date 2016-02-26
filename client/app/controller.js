@@ -52,26 +52,21 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
     return itemString.toLowerCase();
   };
 
-  $scope.sendPost = function() {
-    console.log();
+  $scope.sendPost = function(image) {
     //convert inputted item name to lowerCase
     var lowerCaseItem = convertToLowerCase($scope.user.item);
     //convert inputted address, need to get value with JS bc angular can't detect autocomplete
     var inputtedAddress = document.getElementById('inputAddress').value;
     Map.geocodeAddress(geocoder, Map.map, inputtedAddress, function(converted) {
       //after address converted, save user input item and location to db
-      var reader = new window.FileReader();
-      //console.log();
-      reader.readAsDataURL($scope.uploader.flow.files[0].file);
-      reader.onloadend = function() {
-        DBActions.saveToDB({ item: lowerCaseItem, LatLng: converted, createdAt: new Date(), image: reader.result });
-      };
+      DBActions.saveToDB({ item: lowerCaseItem, LatLng: converted, createdAt: new Date(), image: reader.result });
     });
     $scope.clearForm();
   };
 
   //this function filters map based on what user enters into filter field
   $scope.filterMap = function() {
+    uploader.flow.upload();
     //convert inputted filter item to lowerCase so that matches with lowerCase values stored in db
     var lowerCaseFilterItem = convertToLowerCase($scope.search.input);
     var searchInput = lowerCaseFilterItem;
@@ -107,7 +102,9 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
         //if getCurrentPosition is method successful, returns a coordinates object
         var lat = position.coords.latitude;
         var long = position.coords.longitude;
-        document.getElementById('inputAddress').value = lat + ', ' + long;
+        $scope.$apply(function(){
+          $scope.user.location = lat + ', ' + long;
+        });
         stopSpinner();
       });
     } else {
