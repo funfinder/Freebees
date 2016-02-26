@@ -14,7 +14,6 @@
     <script src="/app/app.js"></script>
     <script src="/app/controller.js"></script>
     <script src='./script/index.js'></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmI2fzx6riKLbgeFlIBvbaXrttPrZrqVI&libraries=places&callback=loadAllItems"></script>
   </head>
 
   <body id="#" ng-app="myApp" ng-controller="FormController">
@@ -24,8 +23,8 @@
         <li><img id="beeIcon" src="bee1resize.png"></li>
         <li><a href="#" id="logoTitle">Freebees</a></li>
         <li><p>Find free stuff around you!<p></li>
-        <li class="rightFloat"><a href="#" class="anchor">Forager</a></li>
-        <li class="rightFloat"><a href="#/map" class="anchor">Giver</a></li>
+        <li class="rightFloat"><a href="#/map" class="anchor">Forager</a></li>
+        <li class="rightFloat"><a href="#/give" class="anchor">Giver</a></li>
       </ul>
       <div id="searchInput">
         <form novalidate>
@@ -36,7 +35,7 @@
      </div>
     </nav>
 
-    <div ui-view="main">
+    <div ui-view="main" >
 
     </div>
 
