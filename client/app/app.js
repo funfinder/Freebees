@@ -8,10 +8,9 @@ angular.module('map.services', [])
     map: map,
     geocoder: geocoder,
     addMarker: addMarker,
-    infoWindow: infoWindow
+    infoWindow: infoWindow,
   };
 });
-
 var map;
 var geocoder;
 var entireDB;
@@ -83,6 +82,7 @@ var showMap = function()
      center: {lat: 37.764115, lng: -122.435280},
      zoom: 12
    });
+    loadAllItems();
 }
 
 /*add a marker to map. Instance needs to be an obj with itemLocation and itemName properties. The last parameter, timeout

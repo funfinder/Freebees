@@ -39,6 +39,7 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
 
 .controller('MapController', function($scope,Map) {
   Map.showMap();
+  //Map.loadAllItems();
 })
 
 
@@ -88,7 +89,7 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
   //this function retrieves everything from the database and renders a map on page
   //this would happen when user first visits page, when user submits an item, or when user deletes an item
   $scope.initMap = function() {
-    Map.loadAllItems();
+    Map.initMap();
   };
   //removes a posting from the db and from the map
   $scope.removePost = function() {
