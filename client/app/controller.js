@@ -19,7 +19,8 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
       url: '/map',
       views: {
         'main': {
-          templateUrl: "/main/map.html"
+          templateUrl: "/main/map.html",
+          controller: "MapController"
         }
       }
     })
@@ -35,6 +36,12 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
       }
     })
   })
+
+.controller('MapController', function($scope,Map) {
+  Map.showMap();
+})
+
+
 //dependencies injected include DBActions factory and Map factory
 .controller('FormController', function($scope, $http, DBActions, Map) {
   $scope.user = {};
