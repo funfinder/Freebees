@@ -11,7 +11,8 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
           templateUrl: "/main/landingPage.html"
         },
         'itemForm@landing': {
-          templateUrl: "main/itemForm.html"
+          templateUrl: "main/itemForm.html",
+          controller: "InputController"
         }
       }
     })
@@ -31,7 +32,8 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
           templateUrl: "/main/give.html"
         },
         'itemForm@give': {
-          templateUrl: "main/itemForm.html"
+          templateUrl: "main/itemForm.html",
+          controller: "InputController"
         }
       }
     })
@@ -39,9 +41,11 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
 
 .controller('MapController', function($scope,Map) {
   Map.showMap();
-  //Map.loadAllItems();
 })
 
+.controller('InputController', function($scope,Map){
+  Map.initAutoComplete();
+})
 
 //dependencies injected include DBActions factory and Map factory
 .controller('FormController', function($scope, $http, DBActions, Map) {
@@ -66,18 +70,31 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
     var inputtedAddress = $scope.user.location;
     Map.geocodeAddress(geocoder, Map.map, inputtedAddress, function(converted) {
       //after address converted, save user input item and location to db
-      var reader = new window.FileReader();
-      //console.log();
-      reader.readAsDataURL($scope.uploader.flow.files[0].file);
-      reader.onloadend = function() {
+      if($scope.uploader.flow.files.length>0){
+        var reader = new window.FileReader();
+        //console.log();
+        reader.readAsDataURL($scope.uploader.flow.files[0].file);
+         reader.onloadend = function() {
         DBActions.saveToDB({ item: lowerCaseItem, LatLng: converted, createdAt: new Date(), image: reader.result });
-      };   });
+       };
+      }
+      else
+      {
+        DBActions.saveToDB({ item: lowerCaseItem, LatLng: converted, createdAt: new Date()});
+
+      }
+
+    });
+    if ($scope.uploader.flow.files.length >0)
+    {
+      $scope.uploader.flow.files.shift();
+    }
     $scope.clearForm();
   };
 
   //this function filters map based on what user enters into filter field
   $scope.filterMap = function() {
-    uploader.flow.upload();
+
     //convert inputted filter item to lowerCase so that matches with lowerCase values stored in db
     var lowerCaseFilterItem = convertToLowerCase($scope.search.input);
     var searchInput = lowerCaseFilterItem;
@@ -86,11 +103,6 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
     $scope.clearForm();
   };
 
-  //this function retrieves everything from the database and renders a map on page
-  //this would happen when user first visits page, when user submits an item, or when user deletes an item
-  $scope.initMap = function() {
-    Map.initMap();
-  };
   //removes a posting from the db and from the map
   $scope.removePost = function() {
     //convert inputted item name to lowerCase to match what's already in db
