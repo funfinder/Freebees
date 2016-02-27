@@ -36,7 +36,6 @@ module.exports = {
     findOne({ itemName: itemName, itemLng: itemLocation.lng, itemLat: itemLocation.lat })
 
     .then(function(item) {
-
         //If the item already exists in db, notify the user they need to try again
         if (item) {
           console.log('That item is already being offered from that location \n Try offering something new');
@@ -66,7 +65,6 @@ module.exports = {
             decodedImage.data = new Buffer(matches[2], 'base64');
             var subStringIndex = Math.floor(Math.random() * matches[2].length-20);
             imageFilePath = 'userimage/'+ matches[2].substring(subStringIndex,subStringIndex+15).replace(/[^a-zA-Z ]/g, "")+'.'+decodedImage.fileExtension;
-            console.log(imageFilePath);
             serverfilepath = __dirname+'/../../'+imageFilePath;
             fs.writeFile(serverfilepath, decodedImage.data, function(err) {
               console.log(err);
