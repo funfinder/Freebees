@@ -46,32 +46,32 @@ module.exports = {
           //Q.nbind() promisifies its first argument, so now you could chain a .then() after create
           //the .then() below could be helpful for future features
           //var image = new Image();
+          if (req.body.image!==undefined){
+            var matches = req.body.image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
+            var decodedImage = {};
 
-          var matches = req.body.image.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/);
-          var decodedImage = {};
-
-          if (matches.length !== 3) {
-          }
-          else{
-          //set the file extension of the image
-          decodedImage.type = matches[1];
-          if (decodedImage.type === 'image/jpeg')
-          {
-           decodedImage.fileExtension = 'jpg'
-          }
-          else if (decodedImage.type ==='image/png')
-          {
-           decodedImage.fileExtension = 'png'
-          }
-
-          decodedImage.data = new Buffer(matches[2], 'base64');
-          var subStringIndex = Math.floor(Math.random() * matches[2].length-20);
-          imageFilePath = 'userimage/'+ matches[2].substring(subStringIndex,subStringIndex+15).replace(/[^a-zA-Z ]/g, "")+'.'+decodedImage.fileExtension;
-          console.log(imageFilePath);
-          serverfilepath = __dirname+'/../../'+imageFilePath;
-          fs.writeFile(serverfilepath, decodedImage.data, function(err) {
-            console.log(err);
-            });
+            if (matches.length !== 3) {
+            }
+            else{
+            //set the file extension of the image
+            decodedImage.type = matches[1];
+            if (decodedImage.type === 'image/jpeg')
+            {
+             decodedImage.fileExtension = 'jpg'
+            }
+            else if (decodedImage.type ==='image/png')
+            {
+             decodedImage.fileExtension = 'png'
+            }
+            decodedImage.data = new Buffer(matches[2], 'base64');
+            var subStringIndex = Math.floor(Math.random() * matches[2].length-20);
+            imageFilePath = 'userimage/'+ matches[2].substring(subStringIndex,subStringIndex+15).replace(/[^a-zA-Z ]/g, "")+'.'+decodedImage.fileExtension;
+            console.log(imageFilePath);
+            serverfilepath = __dirname+'/../../'+imageFilePath;
+            fs.writeFile(serverfilepath, decodedImage.data, function(err) {
+              console.log(err);
+              });
+           }
           }
           create = Q.nbind(Item.create, Item);
           newItem = {
