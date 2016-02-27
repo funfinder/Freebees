@@ -3,6 +3,7 @@ angular.module('map.services', [])
 .factory('Map', function($http){
   return {
     initMap: initMap,
+    showMap: showMap,
     geocodeAddress: geocodeAddress,
     map: map,
     geocoder: geocoder,
@@ -60,10 +61,7 @@ var loadAllItems = function(){
 
 //create an instance of a map where the data passed in is an array of objs
 var initMap = function(data){
-  // map = new google.maps.Map(document.getElementById('map'), {
-  //   center: {lat: 37.764115, lng: -122.435280},
-  //   zoom: 12
-  // });
+
   //creates a global infowindow that will show only one window at a time
   infoWindow = new google.maps.InfoWindow();
 
@@ -78,6 +76,14 @@ var initMap = function(data){
   var options = {};
   var autocomplete = new google.maps.places.Autocomplete(input, options);
 };
+
+var showMap = function()
+{
+    map = new google.maps.Map(document.getElementById('map'), {
+     center: {lat: 37.764115, lng: -122.435280},
+     zoom: 12
+   });
+}
 
 /*add a marker to map. Instance needs to be an obj with itemLocation and itemName properties. The last parameter, timeout
 is passed in as a parameter to sequentially add each item so the markers drop down sequentially */
