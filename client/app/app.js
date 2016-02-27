@@ -106,6 +106,8 @@ var formatDate = function(dateObj){
   return month + '/' + day + '/' + year;
 };
 
+
+
 var startSpinner = function(){
   $('.spinner img').css('visibility', 'visible');
 };
