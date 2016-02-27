@@ -1,40 +1,34 @@
 // Karma configuration
-// Generated on Mon Feb 22 2016 15:47:04 GMT-0800 (PST)
+// Generated on Fri Feb 26 2016 11:36:36 GMT-0800 (PST)
 
 module.exports = function(config) {
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
-    basePath: './',
+    basePath: '',
 
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'chai', 'browserify'],
+    frameworks: ['jasmine', 'requirejs'],
 
 
     // list of files / patterns to load in the browser
+    //list all dependencies here
     files: [
-        'client/bower_components/angular/**/*.js',
-        'client/bower_components/angular-mocks/**/*.*',
-        'client/app/app.js',
-        'client/app/controller.js',
-        'client/app/**/*.js',
-
-      'specs/**/*.js'
+        "specs/updatedSpecs/FBspec.js"
+      // {pattern: 'specs/**/*.js', included: false}
     ],
 
 
     // list of files to exclude
     exclude: [
-      'karma.conf.js'
     ],
 
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-        'specs/*.js': [ 'browserify' ]
     },
 
 
@@ -43,7 +37,7 @@ module.exports = function(config) {
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
     reporters: ['progress'],
 
-    
+
     // web server port
     port: 9876,
 
@@ -57,34 +51,21 @@ module.exports = function(config) {
     logLevel: config.LOG_INFO,
 
 
-    
-
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: false,
+    autoWatch: true,
 
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: ['Chrome'],
 
-    captureTimeout: 20000,
-
-    reportsSlowerThan: 500,
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: false,
 
-
     // Concurrency level
     // how many browser should be started simultaneous
-    // concurrency: Infinity,
-
-    plugins: [
-        'karma-coverage',
-        'karma-mocha',
-        'karma-chai',
-        'karma-chrome-launcher'
-    ]
+    concurrency: Infinity
   })
 }
