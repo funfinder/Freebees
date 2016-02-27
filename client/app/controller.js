@@ -51,7 +51,6 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
 .controller('FormController', function($scope, $http, DBActions, Map) {
   $scope.user = {};
   $scope.uploader = {};
-  Map.initAutoComplete();
 
   $scope.clearForm = function() {
     //need a way to clear addresses filled with autocomplete, angular doesn't detect autocomplete as a change in DOM
