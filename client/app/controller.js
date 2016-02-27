@@ -11,7 +11,8 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
           templateUrl: "/main/landingPage.html"
         },
         'itemForm@landing': {
-          templateUrl: "main/itemForm.html"
+          templateUrl: "main/itemForm.html",
+          controller: "InputController"
         }
       }
     })
@@ -31,7 +32,8 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
           templateUrl: "/main/give.html"
         },
         'itemForm@give': {
-          templateUrl: "main/itemForm.html"
+          templateUrl: "main/itemForm.html",
+          controller: "InputController"
         }
       }
     })
@@ -39,14 +41,17 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
 
 .controller('MapController', function($scope,Map) {
   Map.showMap();
-  //Map.loadAllItems();
 })
 
+.controller('InputController', function($scope,Map){
+  Map.initAutoComplete();
+})
 
 //dependencies injected include DBActions factory and Map factory
 .controller('FormController', function($scope, $http, DBActions, Map) {
   $scope.user = {};
   $scope.uploader = {};
+  Map.initAutoComplete();
 
   $scope.clearForm = function() {
     //need a way to clear addresses filled with autocomplete, angular doesn't detect autocomplete as a change in DOM
@@ -89,7 +94,7 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow'])
   //this function retrieves everything from the database and renders a map on page
   //this would happen when user first visits page, when user submits an item, or when user deletes an item
   $scope.initMap = function() {
-    Map.initMap();
+    Map.googleAPISetup();
   };
   //removes a posting from the db and from the map
   $scope.removePost = function() {

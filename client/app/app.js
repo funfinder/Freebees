@@ -2,8 +2,10 @@ angular.module('map.services', [])
 
 .factory('Map', function($http){
   return {
+    googleAPISetup: googleAPISetup,
     initMap: initMap,
     showMap: showMap,
+    initAutoComplete : initAutoComplete,
     geocodeAddress: geocodeAddress,
     map: map,
     geocoder: geocoder,
@@ -11,6 +13,7 @@ angular.module('map.services', [])
     infoWindow: infoWindow,
   };
 });
+var googleAPIInit = false;
 var map;
 var geocoder;
 var entireDB;
@@ -58,31 +61,59 @@ var loadAllItems = function(){
   });
 };
 
-//create an instance of a map where the data passed in is an array of objs
-var initMap = function(data){
+var googleAPISetup = function(){
+    //google API is loaded
+  googleAPIInit = true;
+  //if it's on the map page when google api is initially callback
+  if (document.getElementById('map')!==null)
+  {
+    console.log('map')
+    showMap();
+  }
+  if (document.getElementById('inputAddress')!== null)
+  {
+    initAutoComplete();
 
+  }
   //creates a global infowindow that will show only one window at a time
   infoWindow = new google.maps.InfoWindow();
 
   //Geocoder is an object Google maps w/ various methods API to pull their geocoding functionality
   geocoder = new google.maps.Geocoder();
+  //add autocomplete functionality to address input field using google maps api
+
+}
+
+var initAutoComplete = function(){
+    if (googleAPIInit){
+  console.log('auto complete initialized')
+  var input = document.getElementById('inputAddress');
+  var options = {};
+  var autocomplete = new google.maps.places.Autocomplete(input, options);
+  }
+}
+
+//create an instance of a map where the data passed in is an array of objs
+var initMap = function(data){
+
   //loop through data returned from db to place on map
   for (var i = 0; i < data.length; i++){
     addMarker(map, data[i], infoWindow, i*30);
   }
-  //add autocomplete functionality to address input field using google maps api
-  var input = document.getElementById('inputAddress');
-  var options = {};
-  var autocomplete = new google.maps.places.Autocomplete(input, options);
+
 };
 
 var showMap = function()
 {
+  // check to ensure google API is loaded before making
+  if (googleAPIInit){
+        console.log('showmap')
     map = new google.maps.Map(document.getElementById('map'), {
      center: {lat: 37.764115, lng: -122.435280},
      zoom: 12
    });
     loadAllItems();
+  }
 }
 
 /*add a marker to map. Instance needs to be an obj with itemLocation and itemName properties. The last parameter, timeout
