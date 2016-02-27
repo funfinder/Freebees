@@ -11,7 +11,7 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow','GoogleMap
           templateUrl: "/main/landingPage.html"
         },
         'itemForm@landing': {
-          templateUrl: "main/itemForm.html",
+          templateUrl: "/main/itemForm.html",
           controller: "InputController"
         }
       }
@@ -32,7 +32,7 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow','GoogleMap
           templateUrl: "/main/give.html"
         },
         'itemForm@give': {
-          templateUrl: "main/itemForm.html",
+          templateUrl: "/main/itemForm.html",
           controller: "InputController"
         }
       }
@@ -127,15 +127,16 @@ Initializer.mapsInitialized
   };
 
   //removes a posting from the db and from the map
-  $scope.removePost = function() {
+  $scope.removePost = function(item) {
+    console.log('removePost invoke')
     //convert inputted item name to lowerCase to match what's already in db
-    var lowerCaseDeleteItem = convertToLowerCase($scope.user.item);
+    //var lowerCaseDeleteItem = convertToLowerCase(item);
     //convert inputted address
-    var inputtedAddress = document.getElementById('inputAddress').value;
+    //var inputtedAddress = document.getElementById('inputAddress').value;
     // Map.geocodeAddress(geocoder, Map.map, inputtedAddress, function(converted) {
     //   DBActions.removeFromDB({ item: lowerCaseDeleteItem, LatLng: converted });
     // });
-    $scope.clearForm();
+    //$scope.clearForm();
   };
 
   //fills in the address field with current lat/lng
