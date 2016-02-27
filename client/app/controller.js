@@ -58,10 +58,7 @@ Initializer.mapsInitialized
   .then(function() {
       var input = document.getElementById('inputAddress');
       var options = {};
-      $scope.autocomplete = new google.maps.places.Autocomplete(input, options);
-      google.maps.event.addListener($scope.autocomplete, 'place_changed', function() {
-        console.log('place changed',$scope.autocomplete.getPlace());
-      });
+        $scope.autocomplete = new google.maps.places.Autocomplete(input, options);
     });
 
   $scope.sendPost = function(image) {
@@ -75,7 +72,6 @@ Initializer.mapsInitialized
     var query = { item: lowerCaseItem, LatLng: LatLng, createdAt: new Date()};
     if($scope.uploader.flow.files.length>0){
       var reader = new window.FileReader();
-      //console.log();
       reader.readAsDataURL($scope.uploader.flow.files[0].file);
        reader.onloadend = function() {
         query.image = reader.result
@@ -124,9 +120,8 @@ Initializer.mapsInitialized
     var searchInput = lowerCaseFilterItem;
     $state.go('map');
     DBActions.filterDB(searchInput,function(data){
-      console.log('did i get here?')
-        $scope.search.input = '';
-        $scope.clearForm();
+      $scope.search.input = '';
+      $scope.clearForm();
 
     });
   };

@@ -65,15 +65,12 @@ module.exports = {
             decodedImage.data = new Buffer(matches[2], 'base64');
             var subStringIndex = Math.floor(Math.random() * matches[2].length-20);
             imageFilePath = 'userimage/'+ matches[2].substring(subStringIndex,subStringIndex+15).replace(/[^a-zA-Z ]/g, "")+'.'+decodedImage.fileExtension;
-            console.log(imageFilePath);
             serverfilepath = __dirname+'/../../'+imageFilePath;
             fs.writeFile(serverfilepath, decodedImage.data, function(err) {
               console.log(err);
               });
            }
           }
-
-        console.log(itemLocation.lng,itemLocation,itemName);
           create = Q.nbind(Item.create, Item);
           newItem = {
             itemName: itemName,
