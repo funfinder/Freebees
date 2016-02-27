@@ -13,6 +13,7 @@
   <script src='./bower_components/angular-ui-router/release/angular-ui-router.js'></script>
 
   <script src="/app/app.js"></script>
+  <script src='/app/GoogleMapsInitializer.js'></script>
   <script src="/app/controller.js"></script>
 
   <script src="/app/resizer.js"></script>
@@ -20,10 +21,10 @@
   <script src="/bower_components/blueimp-load-image/js/load-image.all.min.js"></script>
 
   <script src="/bower_components/ng-flow/dist/ng-flow-standalone.js"></script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmI2fzx6riKLbgeFlIBvbaXrttPrZrqVI&libraries=places&callback=googleAPISetup"></script>
 </head>
 
 <body id="#" ng-app="myApp" ng-controller="FormController" flow-prevent-drop>
+  <!--script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAmI2fzx6riKLbgeFlIBvbaXrttPrZrqVI&libraries=places&callback=googleAPISetup"></script-->
   <nav class="navbar-fixed">
     <div id="headerSection" class="container-fluid">
       <ul>
@@ -40,7 +41,7 @@
       <div id="searchInput">
         <form novalidate>
           <input id="searchBox" placeholder="Search for an item" type="text" ng-model="search.input">
-          <button class="yellowButton" id="searchBtn" ng-click="filterMap()" type="submit"><a href="#">Search</a></button>
+          <button class="yellowButton" id="searchBtn" ng-click="filterMap()" type="submit">Search</button>
         </form>
       </div>
      </div>

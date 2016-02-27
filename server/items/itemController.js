@@ -36,7 +36,6 @@ module.exports = {
     findOne({ itemName: itemName, itemLng: itemLocation.lng, itemLat: itemLocation.lat })
 
     .then(function(item) {
-
         //If the item already exists in db, notify the user they need to try again
         if (item) {
           console.log('That item is already being offered from that location \n Try offering something new');
@@ -73,6 +72,8 @@ module.exports = {
               });
            }
           }
+
+        console.log(itemLocation.lng,itemLocation,itemName);
           create = Q.nbind(Item.create, Item);
           newItem = {
             itemName: itemName,
