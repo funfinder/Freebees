@@ -63,9 +63,10 @@ module.exports = {
              decodedImage.fileExtension = 'png'
             }
             decodedImage.data = new Buffer(matches[2], 'base64');
-            var subStringIndex = Math.floor(Math.random() * matches[2].length-20);
-            imageFilePath = 'userimage/'+ matches[2].substring(subStringIndex,subStringIndex+15).replace(/[^a-zA-Z ]/g, "")+'.'+decodedImage.fileExtension;
-            serverfilepath = __dirname+'/../../'+imageFilePath;
+            var subStringIndex = Math.floor(Math.random() * matches[2].length-15);
+            imageFilePath = matches[2].substring(subStringIndex,subStringIndex+10).replace(/[^a-zA-Z ]/g, "")+'.'+decodedImage.fileExtension;
+            serverfilepath = __dirname+'/../../userimage/'+imageFilePath;
+            imageFilePath = 'image/'+ imageFilePath
             fs.writeFile(serverfilepath, decodedImage.data, function(err) {
               console.log(err);
               });

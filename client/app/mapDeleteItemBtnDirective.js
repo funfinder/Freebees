@@ -1,15 +1,17 @@
 
 angular.module('map.delete', [])
 
-.directive('btn-delete',function(){
-
+.directive('deletebtn',function(){
   return {
-    template: '/main/infoWindow.html'
+    restrict : 'e',
+    template: '<div>omg</div>',
+    //contoller: 'DeleteButtonController'
   };
 })
 
-.controller('DeleteButtonController',function($scope,DBActions){
+.controller('DelBtnController',function($scope,DBActions){
   $scope.item = {};
+  console.log('yup')
 
   $scope.deleteItem = function(item){
 

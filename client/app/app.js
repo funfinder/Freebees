@@ -1,10 +1,12 @@
 angular.module('map.services', [])
 
-.factory('Map', function($http,Initializer,$timeout){
+.factory('Map', function($http,Initializer,$timeout,$compile){
 
   var map;
   var infoWindow
-  var markers = [];
+  var markers =[]
+  var filteredItem = [];
+
   /*add a marker to map. Instance needs to be an obj with itemLocation and itemName properties. The last parameter, timeout
 is passed in as a parameter to sequentially add each item so the markers drop down sequentially */
   var removeMaker = function()
@@ -15,43 +17,11 @@ is passed in as a parameter to sequentially add each item so the markers drop do
     }
     markers = [];
   }
-  var addMarker = function( instance, timeout){
-   $timeout(function(){
-    var image = {
-      //horizontal bee
-      //url: 'https://openclipart.org/image/90px/svg_to_png/221154/Cartoon-Bee.png',
-      url: 'https://www.ezphotoshare.com/images/2016/02/18/YFq6s.gif',
-      // This marker is 41 pixels wide by 61 pixels high.
-      size: new google.maps.Size(41, 61),
-      // The origin for this image is (0, 0).
-      origin: new google.maps.Point(0, 0),
-      // The anchor for this image is the base of the flagpole at (0, 61).
-      anchor: new google.maps.Point(20.5, 30.5)
-    };
-
-    //create a new instance of a google maps marker, will be created for each item in our db
-    var marker = new google.maps.Marker({
-      position: instance.itemLocation,
-      animation: google.maps.Animation.DROP,
-      map: this.map,
-      icon: image,
-      title: 'Hello World!'
-    });
-    var infoWindow = this.infoWindow;
-    markers.push(marker);
-
-    //creates a listener that will attach this instance's data to the global info window and open it
-    google.maps.event.addListener(marker, 'click', function(){;
-      //turn our mongo-stored stringified date into a JS date obj that is then formatted
-      infoWindow.setContent(instance.itemName+' <br><span class="createdAt">'+formatDate(new Date(instance.createdAt))+'</span>');
-      infoWindow.open(this.map,this);
-    });
-  }.bind(this), timeout);
-};
 
   return {
     map: map,
-    addMarker: addMarker,
+    filteredItem : filteredItem,
+    markers : markers,
     removeMaker : removeMaker,
     infoWindow: infoWindow,
   };
