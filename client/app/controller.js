@@ -40,6 +40,7 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow','GoogleMap
   })
 
 .controller('MapController', function($scope,Map,Initializer,DBActions) {
+  var geocoder;
   Initializer.mapsInitialized
   .then(function() {
      Map.map = new google.maps.Map(document.getElementById('map'), {
@@ -49,6 +50,44 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow','GoogleMap
      Map.infoWindow = new google.maps.InfoWindow();
     DBActions.loadAllItems();
   });
+
+
+  $scope.drivingDir=function(){
+    var latlng={};
+    var place=$scope.user.location;
+     geocoder = new google.maps.Geocoder;
+     return geocoder.geocode( { 'address': place}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        console.log("geocode success");
+        var lat=results[0].geometry.location.lat();
+        var lng=results[0].geometry.location.lng();
+        latlng.lat=lat;
+        latlng.lng=lng;
+        Map.drivingDirection(latlng);
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });
+
+  };
+
+  $scope.walkingDir=function(){
+    var latlng={};
+    var place=$scope.user.location;
+     geocoder = new google.maps.Geocoder;
+     return geocoder.geocode( { 'address': place}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        console.log("geocode success");
+        var lat=results[0].geometry.location.lat();
+        var lng=results[0].geometry.location.lng();
+        latlng.lat=lat;
+        latlng.lng=lng;
+        Map.walkingDirection(latlng);
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });
+  };
 })
 
 .controller('InputController', function($scope,Map,Initializer,DBActions,$state){

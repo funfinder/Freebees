@@ -1,7 +1,6 @@
 angular.module('map.services', [])
 
 .factory('Map', function($http,Initializer,$timeout){
-
   var map;
   var infoWindow
   var markers = [];
@@ -15,6 +14,36 @@ is passed in as a parameter to sequentially add each item so the markers drop do
     }
     markers = [];
   }
+
+  var drivingDirection=function(latlngObj){
+    var origin = latlngObj;
+  var indianapolis = {lat: 37.743847, lng: -122.493734};
+  console.log("inside Map.dirvingdir");
+  console.log(latlngObj);
+ 
+   var directionsDisplay = new google.maps.DirectionsRenderer({
+    map: this.map
+  });
+   var request = {
+    destination: indianapolis,
+    origin: origin,
+    travelMode: google.maps.TravelMode.WALKING
+  };
+    var directionsService = new google.maps.DirectionsService();
+  directionsService.route(request, function(response, status) {
+    if (status == google.maps.DirectionsStatus.OK) {
+      // Display the route on the map.
+      directionsDisplay.setDirections(response);
+    }
+  });
+
+  };
+
+  var walkingDirection=function(latlngObj){
+  console.log("inside Map.walkingdir");
+  console.log(latlngObj);
+  };
+
   var addMarker = function( instance, timeout){
    $timeout(function(){
     var image = {
@@ -41,11 +70,14 @@ is passed in as a parameter to sequentially add each item so the markers drop do
     markers.push(marker);
 
     //creates a listener that will attach this instance's data to the global info window and open it
-    google.maps.event.addListener(marker, 'click', function(){;
+    google.maps.event.addListener(marker, 'click', function(){
       //turn our mongo-stored stringified date into a JS date obj that is then formatted
       infoWindow.setContent(instance.itemName+' <br><span class="createdAt">'+formatDate(new Date(instance.createdAt))+'</span>');
       infoWindow.open(this.map,this);
+
     });
+
+
   }.bind(this), timeout);
 };
 
@@ -54,6 +86,8 @@ is passed in as a parameter to sequentially add each item so the markers drop do
     addMarker: addMarker,
     removeMaker : removeMaker,
     infoWindow: infoWindow,
+    drivingDirection: drivingDirection,
+    walkingDirection: walkingDirection
   };
 });
 
@@ -106,9 +140,7 @@ var formatDate = function(dateObj){
   return month + '/' + day + '/' + year;
 };
 
-var drivingDirection=function(){
 
-};
 
 var startSpinner = function(){
   $('.spinner img').css('visibility', 'visible');

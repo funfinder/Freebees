@@ -57,6 +57,7 @@
     "mongoose": "4.4.3",
     "morgan": "1.6.1",
     "q": "1.4.1",
+    "request-promise": "2.0.1",
     "requirejs": "2.1.22",
     "watchify": "3.7.0"
   }
