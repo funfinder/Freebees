@@ -2,14 +2,15 @@
 <form>
 	</br>
  	 Step 1 : Enter an Origin Location: <br>
-    <input type="text" name="origin" placeholder="enter origin location" ng-model="user.location"></form>
+    <input type="text" id="origin" placeholder="enter origin location"></form>
     &nbsp&nbsp<button ng-click="ip()" type='button'>use current location</button><br>
     <br>
     
     <h4>Step 2 : Select a Marker</h4>
     </br>
-    <button type="button" id="drivingdir" ng-click="drivingDir()">Driving Direction!</button>
-    <button type="button" id="walkingdir" ng-click="walkingDir()">Walking Direction!</button>
+    <button type="button" id="drive" ng-click="getDir()">Driving Direction!</button>
+    <button type="button" id="walk" ng-click="getDir()">Walking Direction!</button>
+    <button type="button" id="transit" ng-click="getDir()">Transit Direction!</button>
     </br>
     </br>
 </form>

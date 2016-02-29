@@ -41,6 +41,8 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow','GoogleMap
 
 .controller('MapController', function($scope,Map,Initializer,DBActions) {
   var geocoder;
+  var dirMethod;
+  $scope.autocomplete = {};
   Initializer.mapsInitialized
   .then(function() {
      Map.map = new google.maps.Map(document.getElementById('map'), {
@@ -49,13 +51,26 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow','GoogleMap
    });
      Map.infoWindow = new google.maps.InfoWindow();
     DBActions.loadAllItems();
+    var input = document.getElementById('origin');
+      var options = {};
+    $scope.autocomplete = new google.maps.places.Autocomplete(input, options);
   });
 
+  $("button").on('click',function(e){
+      dirMethod= $(this).attr('id');
+      console.log(dirMethod);
+   });
 
-  $scope.drivingDir=function(){
+  $scope.getDir=function(){
     var latlng={};
-    var place=$scope.user.location;
+  
+    
+    var place=$scope.autocomplete.getPlace();
+    var place=place['formatted_address'];
+    
+    console.log(place);
      geocoder = new google.maps.Geocoder;
+     if(place){
      return geocoder.geocode( { 'address': place}, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
         console.log("geocode success");
@@ -63,31 +78,22 @@ var app = angular.module('myApp', ['map.services', 'ui.router','flow','GoogleMap
         var lng=results[0].geometry.location.lng();
         latlng.lat=lat;
         latlng.lng=lng;
-        Map.drivingDirection(latlng);
+        
+        Map.Direction(latlng,dirMethod);
+        
+
       } else {
         alert("Geocode was not successful for the following reason: " + status);
       }
     });
+    }
+    else{
+        alert("You Didn't Enter an Origin Location, Please Enter One to Get Direction!")
+    }
 
   };
 
-  $scope.walkingDir=function(){
-    var latlng={};
-    var place=$scope.user.location;
-     geocoder = new google.maps.Geocoder;
-     return geocoder.geocode( { 'address': place}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        console.log("geocode success");
-        var lat=results[0].geometry.location.lat();
-        var lng=results[0].geometry.location.lng();
-        latlng.lat=lat;
-        latlng.lng=lng;
-        Map.walkingDirection(latlng);
-      } else {
-        alert("Geocode was not successful for the following reason: " + status);
-      }
-    });
-  };
+  
 })
 
 .controller('InputController', function($scope,Map,Initializer,DBActions,$state){

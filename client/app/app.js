@@ -1,9 +1,11 @@
 angular.module('map.services', [])
 
 .factory('Map', function($http,Initializer,$timeout){
-  var map;
-  var infoWindow
+  var map; 
   var markers = [];
+  var currentMarker;
+  var directionsDisplay;
+  var infoWindow;
   /*add a marker to map. Instance needs to be an obj with itemLocation and itemName properties. The last parameter, timeout
 is passed in as a parameter to sequentially add each item so the markers drop down sequentially */
   var removeMaker = function()
@@ -15,34 +17,51 @@ is passed in as a parameter to sequentially add each item so the markers drop do
     markers = [];
   }
 
-  var drivingDirection=function(latlngObj){
+  var Direction=function(latlngObj, method){
     var origin = latlngObj;
-  var indianapolis = {lat: 37.743847, lng: -122.493734};
-  console.log("inside Map.dirvingdir");
-  console.log(latlngObj);
- 
-   var directionsDisplay = new google.maps.DirectionsRenderer({
-    map: this.map
-  });
-   var request = {
-    destination: indianapolis,
-    origin: origin,
-    travelMode: google.maps.TravelMode.WALKING
-  };
-    var directionsService = new google.maps.DirectionsService();
-  directionsService.route(request, function(response, status) {
-    if (status == google.maps.DirectionsStatus.OK) {
-      // Display the route on the map.
-      directionsDisplay.setDirections(response);
+    
+    if(directionsDisplay!==undefined){
+        directionsDisplay.setMap(null);
     }
-  });
+    if(currentMarker===undefined){
+        alert("No Marker Selected, Please Select a Marker!");
 
+       
+    }
+    else{
+        var selectedLocation = {lat: currentMarker.position.lat() , lng: currentMarker.position.lng()};
+        console.log("inside Map.dirvingdir");
+        var mode;
+        if(method==="drive"){
+            mode=google.maps.TravelMode.DRIVING;
+        }
+        else if(method==="walk"){
+            mode=google.maps.TravelMode.WALKING;
+        }
+        else if(method==="transit"){
+            mode=google.maps.TravelMode.TRANSIT;
+        }
+        directionsDisplay = new google.maps.DirectionsRenderer({
+         map: this.map
+        });
+        var request = {
+            destination: selectedLocation,
+            origin: origin,
+            travelMode: mode
+        };
+        var directionsService = new google.maps.DirectionsService();
+        directionsService.route(request, function(response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+            // Display the route on the map.
+            directionsDisplay.setDirections(response);
+        }
+        });
+         
+       
+    }
   };
 
-  var walkingDirection=function(latlngObj){
-  console.log("inside Map.walkingdir");
-  console.log(latlngObj);
-  };
+  
 
   var addMarker = function( instance, timeout){
    $timeout(function(){
@@ -64,19 +83,30 @@ is passed in as a parameter to sequentially add each item so the markers drop do
       animation: google.maps.Animation.DROP,
       map: this.map,
       icon: image,
-      title: 'Hello World!'
+      title: 'Hello World!',
+      open: false
     });
-    var infoWindow = this.infoWindow;
+    console.log("infowindow this", this);
+    infoWindow = this.infoWindow;
     markers.push(marker);
 
     //creates a listener that will attach this instance's data to the global info window and open it
     google.maps.event.addListener(marker, 'click', function(){
       //turn our mongo-stored stringified date into a JS date obj that is then formatted
-      infoWindow.setContent(instance.itemName+' <br><span class="createdAt">'+formatDate(new Date(instance.createdAt))+'</span>');
-      infoWindow.open(this.map,this);
-
+      if(this.open===false){
+        infoWindow.setContent(instance.itemName+' <br><span class="createdAt">'+formatDate(new Date(instance.createdAt))+'</span>');
+        infoWindow.open(this.map,this);
+        
+        currentMarker=this;
+        this.open=true;
+    }
+    else{
+        infoWindow.close();
+        this.open=false;
+        currentMarker=undefined;
+    }
     });
-
+ 
 
   }.bind(this), timeout);
 };
@@ -86,8 +116,7 @@ is passed in as a parameter to sequentially add each item so the markers drop do
     addMarker: addMarker,
     removeMaker : removeMaker,
     infoWindow: infoWindow,
-    drivingDirection: drivingDirection,
-    walkingDirection: walkingDirection
+    Direction: Direction
   };
 });
 
