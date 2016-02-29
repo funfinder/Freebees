@@ -175,11 +175,11 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
     console.log(method);
     var latlng={};
 
-    var place = $scope.autocomplete.getPlace();
-    if ($scope.user.location) {
+    if ($scope.user.location ==='') {
       latlng = { lat: $scope.user.lat, lng: $scope.user.lng }
       $scope.direction(latlng,method);
-    } else if (place !== undefined){
+    } else if ($scope.autocomplete.getPlace() !== undefined){
+      var place = $scope.autocomplete.getPlace();
       latlng = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
       $scope.direction(latlng,method);
     }
