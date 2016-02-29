@@ -234,6 +234,7 @@ input[type="text"] {
   border: 2px solid #fff;
   color: #fff;
   overflow: hidden;
+  text-align: center;
   text-transform: uppercase;
   background: #fcc626;
   font-weight: 700;
@@ -267,10 +268,11 @@ input[type="text"] {
   font-size: 20px;
 }
 
-.yellowButton > a {
+/*.yellowButton > a {
   padding: 7% 27% 7% 27%;
+  text-align: center;
 
-}
+}*/
 #fillIp {
   border: none;
   color: #606060;
