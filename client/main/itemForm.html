@@ -19,15 +19,12 @@
     <div>
       <button class="yellowButton" ng-hide="uploader.flow.files.length" type='button' flow-btn flow-attrs="{accept:'image/*'}">Select image</button>
       <button class="yellowButton" ng-show="uploader.flow.files.length" type='button' flow-btn flow-attrs="{accept:'image/*'}">Change</button>
-      <button class="yellowButton" ng-show="uploader.flow.files.length" type='button' ng-click="uploader.flow.files[0].cancel()">Remove</button>
     </div>
   </div>
   <div>Only PNG,GIF,JPG files allowed.</div>
   <button class="yellowButton submitForm" type='button'ng-click="sendPost()">
     <a href="#">Submit </a>
   </button>
-  <button class="yellowButton submitForm" type="button" ng-click="removePost()">
-    <a href="#"> Delete</a>
-  </button>
+
 
 </form>
