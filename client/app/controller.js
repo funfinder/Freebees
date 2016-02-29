@@ -208,17 +208,10 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
   $scope.getDir=function(method){
     var latlng={};
 
-<<<<<<< HEAD
     if ($scope.user.location ==='') {
       latlng = { lat: $scope.user.lat, lng: $scope.user.lng }
       $scope.direction(latlng,method);
     } else if ($scope.autocomplete.getPlace() !== undefined){
-=======
-    if ($scope.user.location) {
-      latlng = { lat: $scope.user.lat, lng: $scope.user.lng }
-      $scope.direction(latlng,method);
-    } else if (place !== undefined){
->>>>>>> [Comment] add Code Comment
       var place = $scope.autocomplete.getPlace();
       latlng = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
       $scope.direction(latlng,method);
