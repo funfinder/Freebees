@@ -32,6 +32,7 @@ app.use('/image',express.static(__dirname+'/userImage'));
 
 require('./server/routes')(app);
 
+//create user image folder for store user image
 var dir = './userimage';
 
 if (!fs.existsSync(dir)){
