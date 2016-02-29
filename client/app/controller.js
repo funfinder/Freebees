@@ -51,17 +51,15 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
 
       var input = document.getElementById('origin');
       var options = {};
-    $scope.autocomplete = new google.maps.places.Autocomplete(input, options);
+      $scope.autocomplete = new google.maps.places.Autocomplete(input, options);
 
     });
 
   $scope.addMarker = function(data) {
-    console.log('add Marker being Called');
     Map.removeMaker();
     for (var i = 0; i < data.length; i++) {
       $scope.setMarker(data[i], i * 30);
     }
-    markerCluster = new MarkerClusterer(Map.map,Map.markers);
   };
 
   $scope.removeItem = function(event) {
@@ -97,20 +95,74 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
       //creates a listener that will attach this instance's data to the global info window and open it
       google.maps.event.addListener(marker, 'click', function(marker) {
         //turn our mongo-stored stringified date into a JS date obj that is then formatted
-        var content = '<div><div>' + data.itemName + '</div><br>';
-        if (data.image !== '') {
-          content += '<img src=http://' + window.location.host + '/' + data.image + ' />'
+        if (Map.infoWindow.anchor !== this){
+
+          var content = '<div><div>' + data.itemName + '</div><br>';
+          if (data.image !== '') {
+            content += '<img src=http://' + window.location.host + '/' + data.image + ' />'
+          }
+          content += '<br><button id="'+data._id+'" type="button" ng-click="removeItem($event) " >delete</button><div>'
+          var ele = angular.element(content);
+          $compile(ele)($scope);
+          //$scope.$apply(data._uid);
+          //$scope.apply();
+          Map.infoWindow.setContent(ele[0]);
+          Map.infoWindow.open(Map.map, this);
+          Map.currentMarker=this;
         }
-        content += '<br><button id="'+data._id+'" type="button" ng-click="removeItem($event) " >delete</button><div>'
-        var ele = angular.element(content);
-        $compile(ele)($scope);
-        //$scope.$apply(data._uid);
-        //$scope.apply();
-        Map.infoWindow.setContent(ele[0]);
-        Map.infoWindow.open(this.map, this);
+       else{
+          Map.infoWindow.close();
+        }
       });
     }.bind(this), timeout);
-  }
+  };
+
+  $scope.isInfoWindowOpen=function (infoWindow){
+    var map = infoWindow.getMap();
+    return (map !== null && typeof map !== "undefined");
+  };
+
+  $scope.direction=function(latlngObj, method){
+    var origin = latlngObj;
+    console.log(Map.infoWindow.anchor);
+    if(Map.directionsDisplay){
+        Map.directionsDisplay.setMap(null);
+    }
+    if(!Map.infoWindow.anchor){
+        alert("No Marker Selected, Please Select a Marker!");
+    }
+    else{
+        var selectedLocation = {lat: Map.infoWindow.anchor.position.lat() , lng: Map.infoWindow.anchor.position.lng()};
+        console.log("inside Map.dirvingdir");
+        var mode;
+        if(method==="drive"){
+            mode=google.maps.TravelMode.DRIVING;
+        }
+        else if(method==="walk"){
+            mode=google.maps.TravelMode.WALKING;
+        }
+        else if(method==="transit"){
+            mode=google.maps.TravelMode.TRANSIT;
+        }
+        directionsDisplay = new google.maps.DirectionsRenderer({
+         map: Map.map
+        });
+        console.log(origin);
+        var request = {
+            destination: selectedLocation,
+            origin: origin,
+            travelMode: mode
+        };
+        var directionsService = new google.maps.DirectionsService();
+        directionsService.route(request, function(response, status) {
+        if (status == google.maps.DirectionsStatus.OK) {
+            // Display the route on the map.
+            directionsDisplay.setDirections(response);
+            Map.removeMaker();
+        }
+      });
+    }
+  };
 
   $scope.$watch(function(){return Map.filteredItem},function(newVal,oldVal){
     if (newVal.length > 0 )
@@ -119,44 +171,23 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
     }
   });
 
-    $("button").on('click',function(e){
-      dirMethod= $(this).attr('id');
-      console.log(dirMethod);
-   });
-
-  $scope.getDir=function(){
+  $scope.getDir=function(method){
+    console.log(method);
     var latlng={};
-  
-    
-    var place=$scope.autocomplete.getPlace();
-    var place=place['formatted_address'];
-    
-    console.log(place);
-     geocoder = new google.maps.Geocoder;
-     if(place){
-     return geocoder.geocode( { 'address': place}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        console.log("geocode success");
-        var lat=results[0].geometry.location.lat();
-        var lng=results[0].geometry.location.lng();
-        latlng.lat=lat;
-        latlng.lng=lng;
-        
-        Map.Direction(latlng,dirMethod);
-        
 
-      } else {
-        alert("Geocode was not successful for the following reason: " + status);
-      }
-    });
+    var place = $scope.autocomplete.getPlace();
+    if ($scope.user.location) {
+      latlng = { lat: $scope.user.lat, lng: $scope.user.lng }
+      $scope.direction(latlng,method);
+    } else if (place !== undefined){
+      latlng = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
+      $scope.direction(latlng,method);
     }
-    else{
-        alert("You Didn't Enter an Origin Location, Please Enter One to Get Direction!")
+    else
+    {
+      alert("You Didn't Enter an Origin Location, Please Enter One to Get Direction!")
     }
-
-  };
-
-
+};
 })
 
 .controller('InputController', function($scope, Map, Initializer, DBActions, $state) {
@@ -239,19 +270,6 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
     });
   };
 
-  //removes a posting from the db and from the map
-  $scope.removePost = function(item) {
-    console.log('removePost invoke')
-      //convert inputted item name to lowerCase to match what's already in db
-      //var lowerCaseDeleteItem = convertToLowerCase(item);
-      //convert inputted address
-      //var inputtedAddress = document.getElementById('inputAddress').value;
-      // Map.geocodeAddress(geocoder, Map.map, inputtedAddress, function(converted) {
-      //   DBActions.removeFromDB({ item: lowerCaseDeleteItem, LatLng: converted });
-      // });
-      //$scope.clearForm();
-  };
-
   //fills in the address field with current lat/lng
   $scope.ip = function() {
     startSpinner();
@@ -265,29 +283,22 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
         $scope.user.location = lat + ', ' + long;
         $scope.user.lat = lat;
         $scope.user.lng = long;
-
+        $scope.$digest();
         stopSpinner();
       });
     } else {
       error('Geo Location is not supported');
     }
   };
-  // $scope.clearForm();
 
 })
 
 .controller('DelBtnController',function($scope,DBActions){
   $scope.item = {};
-  console.log('yup')
 
   $scope.deleteItem = function(item){
 
     DBActions.removeFromDB(item);
-  }
-
-  $scope.checkScope = function(){
-    console.log($scope.item);
-
   }
 })
 

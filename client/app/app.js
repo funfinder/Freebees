@@ -9,7 +9,6 @@ angular.module('map.services', [])
   var filteredItem = [];
   var currentMarker;
   var directionsDisplay;
-  var markerCluster;
 
   /*add a marker to map. Instance needs to be an obj with itemLocation and itemName properties. The last parameter, timeout
 is passed in as a parameter to sequentially add each item so the markers drop down sequentially */
@@ -22,107 +21,14 @@ is passed in as a parameter to sequentially add each item so the markers drop do
     markers = [];
   }
 
-  var Direction=function(latlngObj, method){
-    var origin = latlngObj;
-    
-    if(directionsDisplay!==undefined){
-        directionsDisplay.setMap(null);
-    }
-    if(currentMarker===undefined){
-        alert("No Marker Selected, Please Select a Marker!");
-
-       
-    }
-    else{
-        var selectedLocation = {lat: currentMarker.position.lat() , lng: currentMarker.position.lng()};
-        console.log("inside Map.dirvingdir");
-        var mode;
-        if(method==="drive"){
-            mode=google.maps.TravelMode.DRIVING;
-        }
-        else if(method==="walk"){
-            mode=google.maps.TravelMode.WALKING;
-        }
-        else if(method==="transit"){
-            mode=google.maps.TravelMode.TRANSIT;
-        }
-        directionsDisplay = new google.maps.DirectionsRenderer({
-         map: this.map
-        });
-        var request = {
-            destination: selectedLocation,
-            origin: origin,
-            travelMode: mode
-        };
-        var directionsService = new google.maps.DirectionsService();
-        directionsService.route(request, function(response, status) {
-        if (status == google.maps.DirectionsStatus.OK) {
-            // Display the route on the map.
-            directionsDisplay.setDirections(response);
-        }
-        });
-         
-       
-    }
-  };
-
-  
-
-  var addMarker = function( instance, timeout){
-   $timeout(function(){
-    var image = {
-      //horizontal bee
-      //url: 'https://openclipart.org/image/90px/svg_to_png/221154/Cartoon-Bee.png',
-      url: 'https://www.ezphotoshare.com/images/2016/02/18/YFq6s.gif',
-      // This marker is 41 pixels wide by 61 pixels high.
-      size: new google.maps.Size(41, 61),
-      // The origin for this image is (0, 0).
-      origin: new google.maps.Point(0, 0),
-      // The anchor for this image is the base of the flagpole at (0, 61).
-      anchor: new google.maps.Point(20.5, 30.5)
-    };
-
-    //create a new instance of a google maps marker, will be created for each item in our db
-    var marker = new google.maps.Marker({
-      position: instance.itemLocation,
-      animation: google.maps.Animation.DROP,
-      map: this.map,
-      icon: image,
-      title: 'Hello World!',
-      open: false
-    });
-    console.log("infowindow this", this);
-    infoWindow = this.infoWindow;
-    markers.push(marker);
-
-    //creates a listener that will attach this instance's data to the global info window and open it
-    google.maps.event.addListener(marker, 'click', function(){
-      //turn our mongo-stored stringified date into a JS date obj that is then formatted
-      if(this.open===false){
-        infoWindow.setContent(instance.itemName+' <br><span class="createdAt">'+formatDate(new Date(instance.createdAt))+'</span>');
-        infoWindow.open(this.map,this);
-        
-        currentMarker=this;
-        this.open=true;
-    }
-    else{
-        infoWindow.close();
-        this.open=false;
-        currentMarker=undefined;
-    }
-    });
- 
-
-  }.bind(this), timeout);
-};
-
   return {
     map: map,
     filteredItem : filteredItem,
     markers : markers,
     removeMaker : removeMaker,
     infoWindow: infoWindow,
-    Direction: Direction
+    directionsDisplay : directionsDisplay,
+    currentMarker : currentMarker
   };
 });
 
