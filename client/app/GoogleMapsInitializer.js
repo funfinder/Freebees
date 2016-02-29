@@ -1,4 +1,5 @@
 angular.module('GoogleMapsInitializer',[])
+//Initializer for google API
 .factory('Initializer', function($window, $q) {
   // maps loader deferred object
   var mapsDefer = $q.defer();

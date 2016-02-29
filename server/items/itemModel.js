@@ -29,6 +29,7 @@ var ItemSchema = new mongoose.Schema ({
     type: Date,
     required: true
   },
+  //url address relative to the server
   image : {
     type: String
   }
