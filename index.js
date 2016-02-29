@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({limit: '1mb', extended: true}));
 
 //use routes.js
 app.use(express.static(__dirname + '/client'));
-app.use('image',express.static(__dirname+'/userImage'));
+app.use('/image',express.static(__dirname+'/userImage'));
 
 require('./server/routes')(app);
 
