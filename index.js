@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var morgan = require('morgan');
 var jwt = require('express-jwt');
-
+var fs = require('fs');
 var app = express();
 
 mongoURI = process.env.MONGOLAB_URI || "mongodb://localhost/freebiesnearme";
@@ -31,6 +31,12 @@ app.use(express.static(__dirname + '/client'));
 app.use('/image',express.static(__dirname+'/userImage'));
 
 require('./server/routes')(app);
+
+var dir = './userimage';
+
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
 
 app.listen(port);
 console.log('Express is listening on port: ' + port);
