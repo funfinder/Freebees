@@ -1,4 +1,9 @@
 var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleMapsInitializer'])
+  /**
+   * Configuration for routing using ui-router
+   * @param  {$stateProvider} set up for different state for ui-router
+   * @param  {$urlRouterProvider} setup for current url routing
+   */
   .config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/');
 
@@ -39,22 +44,46 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
       })
   })
 
+/**
+ * Map Controller for interact with Map view
+ * @param  {$scope} current scope
+ * @param  {Map} Factory for Map model
+ * @param  {Initializer} Factory for Google API Promise
+ * @param  {DBActions} Factory for DB Action
+ * @param  {$compile} compiler for adding new dynamic angular element to existing dom
+ * @param  {$timeout} Angular settimeout
+ * @param  {$state} ui-route state for routing to different state
+ */
 .controller('MapController', function($scope, Map, Initializer, DBActions, $compile, $timeout,$state) {
+
+  /**
+   * Promise to wait for Google API to initialize
+   */
   Initializer.mapsInitialized
     .then(function() {
+      //setup map to center of SF.
       Map.map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 37.764115, lng: -122.435280 },
         zoom: 12
       });
+
+      //Create Singleton InfoWindow
       Map.infoWindow = new google.maps.InfoWindow();
+
+      //Load all Item form DB
       DBActions.loadAllItems($scope.addMarker);
 
+      //Setup Auto Complete on diriving direction origin textbox
       var input = document.getElementById('origin');
       var options = {};
       $scope.autocomplete = new google.maps.places.Autocomplete(input, options);
 
     });
 
+  /**
+   * @param {Array} Array of google marker
+   * Iterate though the list of google and marker and call setMarker
+   */
   $scope.addMarker = function(data) {
     Map.removeMaker();
     for (var i = 0; i < data.length; i++) {
@@ -62,12 +91,20 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
     }
   };
 
+  /**
+   * @param  {[event]} containing the object that originate the event
+   * Get current marker id and remove item from DB then reload current page.
+   */
   $scope.removeItem = function(event) {
     DBActions.removeFromDB({id:event.target.id},function(){
-      $state.go($state.current, {}, {reload: true})
+      $state.go($state.current, {}, {reload: true});
     });
   }
 
+  /**
+   * @param {[type]}
+   * @param {[type]}
+   */
   $scope.setMarker = function(data, timeout) {
     $timeout(function() {
       var image = {
@@ -124,7 +161,6 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
 
   $scope.direction=function(latlngObj, method){
     var origin = latlngObj;
-    console.log(Map.infoWindow.anchor);
     if(Map.directionsDisplay){
         Map.directionsDisplay.setMap(null);
     }
@@ -133,7 +169,6 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
     }
     else{
         var selectedLocation = {lat: Map.infoWindow.anchor.position.lat() , lng: Map.infoWindow.anchor.position.lng()};
-        console.log("inside Map.dirvingdir");
         var mode;
         if(method==="drive"){
             mode=google.maps.TravelMode.DRIVING;
@@ -147,7 +182,6 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
         directionsDisplay = new google.maps.DirectionsRenderer({
          map: Map.map
         });
-        console.log(origin);
         var request = {
             destination: selectedLocation,
             origin: origin,
@@ -172,7 +206,6 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
   });
 
   $scope.getDir=function(method){
-    console.log(method);
     var latlng={};
 
     if ($scope.user.location ==='') {
@@ -221,7 +254,6 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
         DBActions.saveToDB(query, $scope.successCallback);
       };
     } else {
-      console.log($scope.successCallback);
       DBActions.saveToDB(query, $scope.successCallback);
     }
   };
@@ -306,7 +338,6 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
   //the 'toSave' parameter is an object that will be entered into database,
   //'toSave' has item prop and LatLng properties
   var saveToDB = function(toSave, callback) {
-    console.log(callback);
     $http.post('/submit', toSave)
       //after item has been saved to db, returned data has a data property
       //so we need to access data.data, see below
@@ -333,12 +364,10 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
       .then(function(data) {
 
         callback();
-        console.log(toFilterBy);
         //filter our returned db by the desired itemName
         var filtered = data.data.filter(function(item) {
           return item.itemName.indexOf(toFilterBy) > -1;
         });
-        console.log(filtered);
         Map.removeMaker();
         Map.filteredItem = filtered;
 
