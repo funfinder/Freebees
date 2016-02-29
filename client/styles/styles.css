@@ -149,6 +149,10 @@ Map
   text-align: center;
 }
 
+.content {
+  background-color: rgb(252, 198, 38);
+}
+
 /*
 =========================
 Main
