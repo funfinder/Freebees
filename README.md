@@ -1,7 +1,7 @@
 # Freebees
 Have something to give away? Here's Freebees.
 
-[Freebees](https://freebees.herokuapp.com/)
+[Freebees](https://freebeez.herokuapp.com/)
 
 ## Introduction 
 
