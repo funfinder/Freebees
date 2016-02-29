@@ -116,13 +116,12 @@ module.exports = {
       });
   },
   removeItem: function(req, res) {
-    var itemName = req.body.item;
-    var itemLocation = req.body.LatLng;
+    var itemId = req.body.id;
+    console.log(itemId);
 
-    var removeItem = Q.nbind(Item.remove, Item);
-    removeItem({ itemName: itemName, itemLng: itemLocation.lng, itemLat: itemLocation.lat })
+    var removeItem = Q.nbind(Item.findByIdAndRemove, Item);
+    removeItem({ _id : itemId})
       .then(function(item) {
-
         //If the item already exists, throws an error
         if (!item) {
           res.status(400).send('invalid request, item does not exist');

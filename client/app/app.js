@@ -3,9 +3,10 @@ angular.module('map.services', [])
 .factory('Map', function($http,Initializer,$timeout,$compile){
 
   var map;
-  var infoWindow
-  var markers =[]
+  var infoWindow;
+  var markers =[];
   var filteredItem = [];
+  var markerCluster;
 
   /*add a marker to map. Instance needs to be an obj with itemLocation and itemName properties. The last parameter, timeout
 is passed in as a parameter to sequentially add each item so the markers drop down sequentially */

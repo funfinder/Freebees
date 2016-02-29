@@ -39,7 +39,7 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
       })
   })
 
-.controller('MapController', function($scope, Map, Initializer, DBActions, $compile, $timeout) {
+.controller('MapController', function($scope, Map, Initializer, DBActions, $compile, $timeout,$state) {
   Initializer.mapsInitialized
     .then(function() {
       Map.map = new google.maps.Map(document.getElementById('map'), {
@@ -51,13 +51,18 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
     });
 
   $scope.addMarker = function(data) {
+    console.log('add Marker being Called');
+    Map.removeMaker();
     for (var i = 0; i < data.length; i++) {
       $scope.setMarker(data[i], i * 30);
     }
+    markerCluster = new MarkerClusterer(Map.map,Map.markers);
   };
 
-  $scope.damnit = function(event) {
-    Map.removeFromDB(event.target.id);
+  $scope.removeItem = function(event) {
+    DBActions.removeFromDB({id:event.target.id},function(){
+      $state.go($state.current, {}, {reload: true})
+    });
   }
 
   $scope.setMarker = function(data, timeout) {
@@ -87,13 +92,11 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
       //creates a listener that will attach this instance's data to the global info window and open it
       google.maps.event.addListener(marker, 'click', function(marker) {
         //turn our mongo-stored stringified date into a JS date obj that is then formatted
-        console.log(data);
-
         var content = '<div><div>' + data.itemName + '</div><br>';
         if (data.image !== '') {
           content += '<img src=http://' + window.location.host + '/' + data.image + ' />'
         }
-        content += '<br><button id="'+data._id+'" type="button" ng-click="damnit($event) " >delete</button><div>'
+        content += '<br><button id="'+data._id+'" type="button" ng-click="removeItem($event) " >delete</button><div>'
         var ele = angular.element(content);
         $compile(ele)($scope);
         //$scope.$apply(data._uid);
@@ -179,7 +182,13 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
     //convert inputted filter item to lowerCase so that matches with lowerCase values stored in db
     //var lowerCaseFilterItem = convertToLowerCase($scope.search.input);
     //var searchInput = lowerCaseFilterItem;
-    $state.go('map');
+    if ($state.current==='map')
+    {
+      $state.go($state.current, {}, {reload: true})
+    }
+    else{
+      $state.go('map');
+    }
     DBActions.filterDB($scope.search.input, function(data) {
       $scope.search.input = '';
       $scope.clearForm();
@@ -284,10 +293,10 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
       });
   };
 
-  var removeFromDB = function(toRemove) {
+  var removeFromDB = function(toRemove,callback) {
     return $http.post('/pickup', toRemove)
       .then(function(data) {
-        Map.loadAllItems();
+        callback();
       }, function(err) {
         console.log('Error when removeFromDB invoked - post to "/pickup" failed. Error: ', err);
       });
