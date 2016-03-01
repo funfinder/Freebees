@@ -63,5 +63,3 @@ Please refer to the [STYLE-GUIDE.md](_STYLE-GUIDE.md) file to see our style guid
 - Thomas Sorensen ([Thomas Sorensen](https://www.linkedin.com/in/sorensenthomas))
 - Jason Cheung ([Jason Cheung](https://ca.linkedin.com/in/jasoncheung1))
 
-
-MKS Greenfield Project
