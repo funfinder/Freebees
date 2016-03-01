@@ -28,12 +28,12 @@ app.use(bodyParser.urlencoded({limit: '1mb', extended: true}));
 
 //use routes.js
 app.use(express.static(__dirname + '/client'));
-app.use('/image',express.static(__dirname+'/userImage'));
+app.use('/image',express.static(__dirname+'/tmp'));
 
 require('./server/routes')(app);
 
 //create user image folder for store user image
-var dir = './userimage';
+var dir = './tmp';
 
 if (!fs.existsSync(dir)){
     fs.mkdirSync(dir);
