@@ -23,3 +23,4 @@ angular.module('map.delete', [])
 
   }
 })
+
