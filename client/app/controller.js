@@ -80,6 +80,7 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
       $scope.autocomplete.addListener('place_changed', function() {
         $scope.user.lat = null;
         $scope.user.lng = null;
+        $scope.user.location = ''
       });
     });
 
@@ -255,6 +256,9 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
       var input = document.getElementById('inputAddress');
       var options = {};
       $scope.autocomplete = new google.maps.places.Autocomplete(input, options);
+      $scope.user.lat = null;
+      $scope.user.lng = null;
+      $scope.user.location = ''
     });
 
   /**
