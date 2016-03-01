@@ -77,7 +77,11 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
       var input = document.getElementById('origin');
       var options = {};
       $scope.autocomplete = new google.maps.places.Autocomplete(input, options);
-
+      $scope.autocomplete.addListener('place_changed', function() {
+        $scope.user.lat = null;
+        $scope.user.lng = null;
+        $scope.user.location = ''
+      });
     });
 
   /**
@@ -130,7 +134,6 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
 
       //push marker to Map Factory marker array for removing purpose.
       Map.markers.push(marker);
-      console.log(Map.markers);
 
       //creates a listener that will attach this instance's data to the global info window and open it
       google.maps.event.addListener(marker, 'click', function(marker) {
@@ -185,9 +188,10 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
         else if(method==="transit"){
             mode=google.maps.TravelMode.TRANSIT;
         }
-        directionsDisplay = new google.maps.DirectionsRenderer({
+        Map.directionsDisplay = new google.maps.DirectionsRenderer({
          map: Map.map
         });
+
         var request = {
             destination: selectedLocation,
             origin: origin,
@@ -198,7 +202,7 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
         directionsService.route(request, function(response, status) {
         if (status == google.maps.DirectionsStatus.OK) {
             // Display the route on the map.
-            directionsDisplay.setDirections(response);
+            Map.directionsDisplay.setDirections(response);
             Map.removeMarker();
         }
       });
@@ -220,10 +224,10 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
   $scope.getDir=function(method){
     var latlng={};
 
-    if ($scope.user.location ==='') {
+    if ($scope.user.lng!== null &&$scope.user.lat!==null) {
       latlng = { lat: $scope.user.lat, lng: $scope.user.lng };
       $scope.direction(latlng,method);
-    } else if ($scope.autocomplete.getPlace() !== undefined){
+    } else if ($scope.autocomplete.getPlace()!== undefined){
       var place = $scope.autocomplete.getPlace();
       latlng = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
       $scope.direction(latlng,method);
@@ -252,6 +256,9 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
       var input = document.getElementById('inputAddress');
       var options = {};
       $scope.autocomplete = new google.maps.places.Autocomplete(input, options);
+      $scope.user.lat = null;
+      $scope.user.lng = null;
+      $scope.user.location = ''
     });
 
   /**
@@ -305,6 +312,8 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
 .controller('FormController', function($scope, DBActions, Map, $state) {
   $scope.user = {};
   $scope.uploader = {};
+  $scope.user.lat = null;
+  $scope.user.lng = null;
 
   $scope.clearForm = function() {
     //need a way to clear addresses filled with autocomplete, angular doesn't detect autocomplete as a change in DOM
@@ -409,7 +418,6 @@ var app = angular.module('myApp', ['map.services', 'ui.router', 'flow', 'GoogleM
     //gets everything from the db in an obj referenced as data
     return $http.get('/api/items')
       .then(function(data) {
-        console.log('calledback')
         callback();
         //filter our returned db by the desired itemName
         var filtered = data.data.filter(function(item) {
