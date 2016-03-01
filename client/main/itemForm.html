@@ -1,0 +1,30 @@
+<form novalidate>
+  <input placeholder="Your item" type="text" ng-model="user.item">
+  <input placeholder="Your address" id="inputAddress" type="text" ng-model= "user.location" >
+  <br>
+  <button id="fillIp" ng-click="ip()" type='button'>Or use current location</button>
+  <div class="spinner"><img src="loading.gif"></div>
+  <br>
+  <br>
+  <!--New Image Tag-->
+  <div flow-init='{singleFile:true}' flow-image-resize flow-name="uploader.flow" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]">
+    <div flow-drop flow-drag-enter="style={border:'4px solid green'}" flow-drag-leave="style={}" ng-style="style">
+      <div id='imageDropBox' ng-hide="uploader.flow.files.length">
+        <img src="http://www.placehold.it/400x300/EFEFEF/AAAAAA&text=ADD+AN+IMAGE" />
+      </div>
+      <div id='imageDropBox' ng-show="uploader.flow.files.length">
+        <img my-flow-img="uploader.flow.files[0]" />
+      </div>
+    </div>
+    <div>
+      <button class="yellowButton" ng-hide="uploader.flow.files.length" type='button' flow-btn flow-attrs="{accept:'image/*'}">Select image</button>
+      <button class="yellowButton" ng-show="uploader.flow.files.length" type='button' flow-btn flow-attrs="{accept:'image/*'}">Change</button>
+    </div>
+  </div>
+  <div>Only PNG,GIF,JPG files allowed.</div>
+  <button class="yellowButton submitForm" type='button'ng-click="sendPost()">
+    <a href="#">Submit </a>
+  </button>
+
+
+</form>
