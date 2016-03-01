@@ -1,22 +1,23 @@
 
 <div class="center">
-<h2> Get Directions to the FreeBee </h2>
+<h2> Get directions to the freebie </h2>
 <form>
-	<br>
-
- 	 Step 1 : Enter an Origin Location: <br>
-    <input type="text" ng-model="user.location" id='origin' placeholder="enter origin location"></form>
-    &nbsp&nbsp<button ng-click="ip()" type='button'>use current location</button><br>
-    <br>
-
-    <h4>Step 2 : Select a Marker</h4>
-    <br>
-    <button type="button" id="drive" ng-click="getDir('drive')">Driving Direction!</button>
-    <button type="button" id="walk" ng-click="getDir('walk')">Walking Direction!</button>
-    <button type="button" id="transit" ng-click="getDir('transit')">Transit Direction!</button>
-    <br>
-    <br>
+ 	 <h3>Step 1 : Enter starting location</h3>
+    <input type="text" ng-model="user.location" id='origin' placeholder="Enter starting location">
 </form>
+
+    <br>
+    <button ng-click="ip()" type='button' class="yellowButton">Use current location</button><br>
+    <br>
+
+    <h3>Step 2 : Select a marker on the map</h3>
+    <h3>Step 3 : Choose a method of transportation</h3>
+    <br>
+    <button type="button" id="drive" class="yellowButton" ng-click="getDir('drive')">Driving</button>
+    <button type="button" id="walk" class="yellowButton" ng-click="getDir('walk')">Walking</button>
+    <button type="button" id="transit" class="yellowButton" ng-click="getDir('transit')">Transit</button>
+    <br>
+    <br>
 </div>
 <div id="map"></div>
 
