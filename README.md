@@ -1,5 +1,6 @@
-# Freebees
-Have something to give away? Here's Freebees.
+# Freebeez
+Want something new?
+Have something to give away? Try Freebeez.
 
 [Freebees](https://freebeez.herokuapp.com/)
 
@@ -57,10 +58,10 @@ Please refer to the [CONTRIBUTING.md](_CONTRIBUTING.md) file to see our git work
 Please refer to the [STYLE-GUIDE.md](_STYLE-GUIDE.md) file to see our style guide.
 
 ## Contributors
-- Collin Adams ([Collin Adams](https://github.com/collinadams))
-- Alice Kao ([Alice Kao](https://github.com/alicekao))
-- Jessica Park ([Jessica Park](https://github.com/tinkleJess))
-- Michael Serna ([Michael Serna](https://github.com/michaelserna))
+- Nadine Ott ([Nadine Ott](https://www.linkedin.com/in/nadineott))
+- Elva Chao ([Elva Chao](https://www.linkedin.com/in/odekyc))
+- Thomas Sorensen ([Thomas Sorensen](https://www.linkedin.com/in/sorensenthomas))
+- Jason Cheung ([Jason Cheung](https://ca.linkedin.com/in/jasoncheung1))
 
 
 MKS Greenfield Project
